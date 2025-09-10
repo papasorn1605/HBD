@@ -11,38 +11,28 @@
     --accent:#a3c4f3; --shadow:0 10px 30px rgba(25,23,40,.12);
   }
   *{box-sizing:border-box}
-  html,body{margin:0;font-family:ui-rounded,system-ui,"Segoe UI",Poppins,sans-serif;color:var(--ink);background:linear-gradient(180deg,#fbfbff,#f2f6ff 40%,#fff)}
+  html,body{margin:0;overflow-x:hidden;font-family:ui-rounded,system-ui,"Segoe UI",Poppins,sans-serif;color:var(--ink);background:linear-gradient(180deg,#fbfbff,#f2f6ff 40%,#fff)}
   a{color:inherit;text-decoration:none}
 
-  /* Header */
-  header{
-    position:sticky; top:0; z-index:10;
-    backdrop-filter:saturate(1.4) blur(8px);
-    background:rgba(255,255,255,.7);
-    border-bottom:1px solid rgba(0,0,0,.06);
-    padding-inline: clamp(12px,2vw,28px);
-  }
-  header .inner{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:16px 0;max-width:1280px;margin:0 auto}
-  .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
-  .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(45deg,var(--brand),var(--brand-2));box-shadow:0 0 0 6px rgba(149,213,178,.18)}
-  nav{display:flex;gap:10px}
+  /* ===== Topbar Card Header ===== */
+  header{position:sticky;top:0;z-index:30;background:linear-gradient(180deg,rgba(255,255,255,.65),rgba(255,255,255,0));backdrop-filter:saturate(1.2) blur(8px);padding:10px clamp(10px,2vw,20px)}
+  .topbar-card{max-width:1200px;margin:12px auto 0;background:rgba(255,255,255,.92);border:1px solid rgba(0,0,0,.06);border-radius:26px;padding:14px clamp(14px,2.2vw,22px);box-shadow:0 14px 34px rgba(25,23,40,.10),0 1px 0 #fff inset}
+  .topbar-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .topbar-title{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.2px;font-size:clamp(18px,2.4vw,28px)}
+  .topbar-title .emoji{filter:drop-shadow(0 2px 8px rgba(25,23,40,.08))}
+  .btn-back{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:18px;padding:10px 16px;font-weight:700;box-shadow:0 12px 26px rgba(25,23,40,.12);transition:transform .18s,box-shadow .18s,border-color .18s}
+  .btn-back:hover{transform:translateY(-2px);border-color:rgba(0,0,0,.12);box-shadow:0 16px 30px rgba(25,23,40,.16)}
 
-  /* ปุ่ม */
-  .btn{
-    appearance:none;border:1px solid rgba(0,0,0,.08);background:var(--card);
-    padding:10px 14px;border-radius:14px;font-weight:600;cursor:pointer;
-    box-shadow:var(--shadow);position:relative;overflow:hidden;
-    transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
-  }
-  .btn::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,#ffffffa0,#ffffff00 40%);transform:translateX(-120%);transition:transform .45s ease}
-  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(149,213,178,.18),var(--shadow);border-color:rgba(0,0,0,.12)}
+  /* ปุ่มทั่วไป + ปุ่ม gradient */
+  .btn{appearance:none;border:1px solid rgba(0,0,0,.08);background:var(--card);padding:10px 14px;border-radius:14px;font-weight:600;cursor:pointer;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:transform .18s,box-shadow .18s,border-color .18s}
+  .btn::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,#ffffffa0,#ffffff00 40%);transform:translateX(-120%);transition:transform .45s}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(189,224,254,.28),var(--shadow);border-color:rgba(0,0,0,.12)}
   .btn:hover::after{transform:translateX(0)}
   .btn.brand{background:linear-gradient(120deg,var(--brand-2),var(--brand-3));border:none}
-  .btn.brand:hover{box-shadow:0 14px 28px rgba(189,224,254,.28),var(--shadow)}
 
   /* Layout */
   .wrap{max-width:1280px;margin:0 auto;padding:clamp(16px,2.4vw,28px)}
-  section{padding:56px 0}
+  section{padding:40px 0}
   .grid{display:grid;grid-template-columns:1.25fr .85fr;gap:32px}
   @media (max-width:980px){.grid{grid-template-columns:1fr}}
 
@@ -50,38 +40,47 @@
   h1{font-size:clamp(28px,4vw,44px);margin:8px 0 10px;line-height:1.1}
   p.lead{color:var(--muted);margin:0 0 18px}
 
-  /* Gallery */
-  .gallery-grid{
-    display:grid; gap:18px;
-    grid-template-columns: repeat(2, minmax(0,1fr));
+  /* ===== Carousel (Auto Slide) ===== */
+  .carousel{position:relative;border-radius:24px;overflow:hidden;isolation:isolate}
+  .carousel .slider{
+    display:flex; width:100%; height:100%;
+    transition:transform .6s ease; will-change:transform;
   }
-  @media (max-width:768px){ .gallery-grid{grid-template-columns:1fr} }
+  .carousel .slide{min-width:100%; display:flex; justify-content:center; align-items:center; padding:0 6px}
+  .carousel .polaroid{max-width:min(820px,92vw); margin:18px auto}
 
-  .polaroid{
-    position:relative; border-radius:18px; overflow:visible;
-    padding:12px 12px 40px; background:#fff;
-    box-shadow:0 10px 28px rgba(25,23,40,.12);
-    transition: transform .22s ease, box-shadow .22s ease, filter .22s ease;
+  /* ปุ่มควบคุม */
+  .carousel .ctrl{
+    position:absolute; top:50%; translate:0 -50%;
+    width:42px; height:42px; border:none; border-radius:50%;
+    background:rgba(255,255,255,.85); box-shadow:0 6px 18px rgba(25,23,40,.18);
+    cursor:pointer; font-size:22px; font-weight:700; line-height:42px;
+    display:grid; place-items:center; z-index:2;
   }
-  .polaroid img{
-    width:100%; aspect-ratio:4/3; object-fit:cover; display:block;
-    border-radius:12px; box-shadow:0 4px 12px rgba(25,23,40,.10) inset;
-    cursor:zoom-in;
-  }
-  .polaroid::before{
-    content:""; position:absolute; left:50%; top:-10px; translate:-50% 0;
-    width:72px; height:20px; border-radius:6px;
-    background: var(--tape, linear-gradient(120deg, var(--brand-2), var(--brand-3)));
-    box-shadow:0 6px 12px rgba(0,0,0,.08); opacity:.95; rotate:-3deg;
-  }
-  .polaroid figcaption{
-    position:absolute; left:0; right:0; bottom:10px;
-    text-align:center; font-size:14px; color:#6e6e82; letter-spacing:.2px;
-  }
-  .polaroid:hover{ transform: translateY(-6px) scale(1.02); box-shadow: 0 18px 36px rgba(173,217,255,.28), 0 10px 28px rgba(25,23,40,.12) }
-  .polaroid:hover img{ filter: saturate(1.06) brightness(1.02) }
+  .carousel .ctrl:hover{background:#fff}
+  .carousel .prev{left:10px}
+  .carousel .next{right:10px}
 
-  /* Cake */
+  /* จุดบอกสถานะ */
+  .carousel .dots{
+    position:absolute; left:50%; bottom:10px; translate:-50% 0; display:flex; gap:8px; z-index:2;
+    background:rgba(255,255,255,.75); padding:6px 10px; border-radius:999px; backdrop-filter:blur(4px);
+    border:1px solid rgba(0,0,0,.06)
+  }
+  .carousel .dot{
+    width:8px; height:8px; border-radius:50%; background:#cfd8ff; opacity:.7; border:1px solid rgba(0,0,0,.06)
+  }
+  .carousel .dot.active{background:#95d5b2; opacity:1}
+
+  /* ===== Polaroid / Gallery visual ===== */
+  .polaroid{position:relative;border-radius:18px;overflow:visible;padding:12px 12px 40px;background:#fff;box-shadow:0 10px 28px rgba(25,23,40,.12);transition:transform .22s, box-shadow .22s, filter .22s}
+  .polaroid img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:12px;box-shadow:0 4px 12px rgba(25,23,40,.10) inset;cursor:zoom-in}
+  .polaroid::before{content:"";position:absolute;left:50%;top:-10px;translate:-50% 0;width:72px;height:20px;border-radius:6px;background:var(--tape,linear-gradient(120deg,var(--brand-2),var(--brand-3)));box-shadow:0 6px 12px rgba(0,0,0,.08);opacity:.95;rotate:-3deg}
+  .polaroid figcaption{position:absolute;left:0;right:0;bottom:10px;text-align:center;font-size:14px;color:#6e6e82;letter-spacing:.2px}
+  .polaroid:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 18px 36px rgba(173,217,255,.28),0 10px 28px rgba(25,23,40,.12)}
+  .polaroid:hover img{filter:saturate(1.06) brightness(1.02)}
+
+  /* ===== Cake ===== */
   .cake-area{position:relative;background:linear-gradient(180deg,#fff,#fff8fb);border-radius:24px;padding:24px;box-shadow:0 14px 40px rgba(149,213,178,.12),var(--shadow)}
   .stage{display:grid;place-items:center;min-height:420px;position:relative}
   .hint-breath{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.9);border:1px solid rgba(0,0,0,.06);padding:8px 10px;border-radius:12px;font-size:12px;color:#666}
@@ -92,15 +91,15 @@
   .smoke{opacity:0;animation:smokeUp 1.5s ease-out forwards}
   @keyframes smokeUp{from{opacity:0;transform:translateY(0)} 30%{opacity:.9} to{opacity:0;transform:translateY(-50px)}}
 
-  /* Balloon */
+  /* ===== Balloon ===== */
   .balloon-wrap{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
-  .balloon{position:absolute;bottom:-120px;width:24px;height:32px;border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;opacity:.35;animation:float var(--dur) linear infinite;filter:blur(.2px)}
+  .balloon{position:absolute;bottom:-120px;width:24px;height:32px;border-radius:50% / 60% 60% 40% 40%;opacity:.35;animation:float var(--dur) linear infinite;filter:blur(.2px)}
   .balloon::after{content:"";position:absolute;left:50%;top:30px;width:1px;height:60px;background:rgba(0,0,0,.12)}
   @keyframes float{to{transform:translateY(-120vh)}}
 
   footer{padding:34px 0 80px;color:#777;text-align:center}
 
-  /* Lightbox */
+  /* ===== Lightbox ===== */
   .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:1000}
   .lightbox img{max-width:90%;max-height:90%;border-radius:12px;box-shadow:0 0 20px rgba(0,0,0,.5);transition:transform .3s ease}
   .lightbox.active{display:flex}
@@ -114,36 +113,50 @@
   <!-- บอลลูน -->
   <div class="balloon-wrap" id="balloons"></div>
 
+  <!-- Header การ์ด -->
   <header>
-    <div class="inner">
-      <div class="logo"><span class="dot"></span>วันของครูชลลี่</div>
-      <nav><a class="btn brand" href="wishes.html">ไปหน้าคำอวยพร →</a></nav>
+    <div class="topbar-card">
+      <div class="topbar-row">
+        <div class="topbar-title"><span class="emoji">🎂</span> วันของครูชลลี่</div>
+        <a class="btn-back" href="wishes.html">ไปหน้าคำอวยพร →</a>
+      </div>
     </div>
   </header>
 
   <main class="wrap" id="top">
     <section class="grid">
-      <!-- ซ้าย: แกลเลอรี -->
+      <!-- ซ้าย: แกลเลอรีแบบสไลด์ -->
       <div class="card">
         <h1>อัลบั้มวันพิเศษ</h1>
         <p class="lead">รวมโมเมนต์ดี ๆ ของครูชลลี่ ✨</p>
-        <div class="gallery-grid" id="gallery">
-          <figure class="polaroid" style="--tape:linear-gradient(120deg,#ffd6e7,#bde0fe)">
-            <img src="/assets/photo1.jpg" alt="รูป 1" loading="lazy" data-caption="วันดี ๆ">
-            <figcaption>วันดี ๆ </figcaption>
-          </figure>
-          <figure class="polaroid" style="--tape:linear-gradient(120deg,#ffe5a5,#cddafd)">
-            <img src="/assets/photo2.jpg" alt="รูป 2" loading="lazy" data-caption="ยิ้มหน่อยน้า">
-            <figcaption>ยิ้มหน่อยน้า </figcaption>
-          </figure>
-          <figure class="polaroid" style="--tape:linear-gradient(120deg,#bde0fe,#95d5b2)">
-            <img src="/assets/photo3.jpg" alt="รูป 3" loading="lazy" data-caption="ความทรงจำพิเศษ">
-            <figcaption>ความทรงจำพิเศษ</figcaption>
-          </figure>
-          <figure class="polaroid" style="--tape:linear-gradient(120deg,#ffc8dd,#ffd6e7)">
-            <img src="/assets/photo4.jpg" alt="รูป 4" loading="lazy" data-caption="Happy Moment ✨">
-            <figcaption>Happy Moment ✨</figcaption>
-          </figure>
+
+        <!-- ===== Carousel ===== -->
+        <div class="carousel" id="gallery">
+          <div class="slider" id="slider">
+            <figure class="slide polaroid" style="--tape:linear-gradient(120deg,#ffd6e7,#bde0fe)">
+              <img src="/assets/photo1.jpg" alt="รูป 1" loading="lazy" data-caption="วันดี ๆ">
+              <figcaption>🥓</figcaption>
+            </figure>
+            <figure class="slide polaroid" style="--tape:linear-gradient(120deg,#ffe5a5,#cddafd)">
+              <img src="/assets/photo2.jpg" alt="รูป 2" loading="lazy" data-caption="ยิ้มหน่อยน้า">
+              <figcaption>🌦️</figcaption>
+            </figure>
+            <figure class="slide polaroid" style="--tape:linear-gradient(120deg,#bde0fe,#95d5b2)">
+              <img src="/assets/photo3.jpg" alt="รูป 3" loading="lazy" data-caption="ความทรงจำพิเศษ">
+              <figcaption>🎧</figcaption>
+            </figure>
+            <figure class="slide polaroid" style="--tape:linear-gradient(120deg,#ffc8dd,#ffd6e7)">
+              <img src="/assets/photo4.jpg" alt="รูป 4" loading="lazy" data-caption="Happy Moment ✨">
+              <figcaption>✨</figcaption>
+            </figure>
+          </div>
+
+          <!-- ปุ่มเลื่อน -->
+          <button class="ctrl prev" id="prevBtn" aria-label="ก่อนหน้า">‹</button>
+          <button class="ctrl next" id="nextBtn" aria-label="ถัดไป">›</button>
+
+          <!-- จุดสถานะ -->
+          <div class="dots" id="dots"></div>
         </div>
       </div>
 
@@ -152,90 +165,34 @@
         <div class="hint-breath">พูดว่า “ฟู่วว” ใส่ไมค์ หรือกดปุ่ม “เป่าเค้ก”</div>
         <div class="stage">
           <canvas id="confetti"></canvas>
-
-          <!-- 🎂 เค้ก (SVG เต็ม) -->
+          <!-- เค้ก SVG -->
           <svg id="cakeSvg" width="420" viewBox="0 0 420 360" aria-label="birthday cake">
-            <!-- จาน -->
-            <ellipse cx="210" cy="318" rx="160" ry="18" fill="#eaf2ff"/>
-            <ellipse cx="210" cy="312" rx="150" ry="16" fill="#f6fbff" />
-
-            <!-- ชั้นล่าง -->
+            <ellipse cx="210" cy="318" rx="160" ry="18" fill="#eaf2ff"/><ellipse cx="210" cy="312" rx="150" ry="16" fill="#f6fbff"/>
             <g transform="translate(45,150)">
               <rect width="330" height="120" rx="26" fill="#fff0c9" stroke="#f2d9a6"/>
               <rect x="12" y="62" width="306" height="20" rx="10" fill="#fff6df"/>
               <path d="M10,20 C30,40 50,42 70,20 C90,-2 110,38 130,22 C150,6 170,42 190,18 C210,-4 230,40 250,24 C270,8 290,42 310,20 L310,70 L10,70 Z" fill="url(#icingGrad)"/>
               <rect x="12" y="14" width="306" height="10" rx="5" fill="#fff" opacity=".15"/>
             </g>
-
-            <!-- ชั้นบน -->
             <g transform="translate(75,110)">
               <rect width="260" height="70" rx="22" fill="#ffe9c9" stroke="#f2d9a6"/>
               <path d="M0,24 C20,44 40,46 60,24 C80,2 100,42 120,26 C140,10 160,46 180,22 C200,0 220,44 240,26 L240,58 L0,58 Z" fill="url(#icingGrad)"/>
               <rect x="8" y="6" width="244" height="8" rx="4" fill="#fff" opacity=".15"/>
             </g>
-
-            <!-- กำหนดกราเดียนต์ไอซิ่งชมพูอ่อน -->
-            <defs>
-              <linearGradient id="icingGrad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#ffeaf3"/>
-                <stop offset="100%" stop-color="#ffd9ee"/>
-              </linearGradient>
-            </defs>
-
-            <!-- สปริงเกิลส์ -->
-            <g opacity=".75">
-              <rect x="120" y="180" width="6" height="3" fill="#bde0fe"/>
-              <circle cx="170" cy="196" r="3" fill="#ffb3c1"/>
-              <rect x="210" y="178" width="6" height="3" fill="#a3c4f3"/>
-              <circle cx="260" cy="186" r="3" fill="#ffc8dd"/>
-            </g>
-
-            <!-- ท็อปปิ้ง -->
+            <defs><linearGradient id="icingGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ffeaf3"/><stop offset="100%" stop-color="#ffd9ee"/></linearGradient></defs>
+            <g opacity=".75"><rect x="120" y="180" width="6" height="3" fill="#bde0fe"/><circle cx="170" cy="196" r="3" fill="#ffb3c1"/><rect x="210" y="178" width="6" height="3" fill="#a3c4f3"/><circle cx="260" cy="186" r="3" fill="#ffc8dd"/></g>
             <g transform="translate(80,96)">
-              <g opacity=".95">
-                <ellipse cx="30" cy="24" rx="16" ry="10" fill="#fff9f3"/>
-                <ellipse cx="90" cy="18" rx="16" ry="10" fill="#fff9f3"/>
-                <ellipse cx="150" cy="22" rx="16" ry="10" fill="#fff9f3"/>
-                <ellipse cx="210" cy="16" rx="16" ry="10" fill="#fff9f3"/>
-              </g>
-              <g opacity=".9">
-                <circle cx="30" cy="10" r="9" fill="#ff9eb4"/>
-                <circle cx="150" cy="6" r="9" fill="#ff9eb4"/>
-                <circle cx="210" cy="4" r="8" fill="#ff9eb4"/>
-                <ellipse cx="24" cy="4" rx="5" ry="3" fill="#bdeacb"/>
-                <ellipse cx="144" cy="0" rx="5" ry="3" fill="#bdeacb"/>
-                <ellipse cx="204" cy="-2" rx="5" ry="3" fill="#bdeacb"/>
-              </g>
-              <g opacity=".95">
-                <circle cx="90" cy="4" r="7" fill="#cfe6ff"/>
-              </g>
+              <g opacity=".95"><ellipse cx="30" cy="24" rx="16" ry="10" fill="#fff9f3"/><ellipse cx="90" cy="18" rx="16" ry="10" fill="#fff9f3"/><ellipse cx="150" cy="22" rx="16" ry="10" fill="#fff9f3"/><ellipse cx="210" cy="16" rx="16" ry="10" fill="#fff9f3"/></g>
+              <g opacity=".9"><circle cx="30" cy="10" r="9" fill="#ff9eb4"/><circle cx="150" cy="6" r="9" fill="#ff9eb4"/><circle cx="210" cy="4" r="8" fill="#ff9eb4"/><ellipse cx="24" cy="4" rx="5" ry="3" fill="#bdeacb"/><ellipse cx="144" cy="0" rx="5" ry="3" fill="#bdeacb"/><ellipse cx="204" cy="-2" rx="5" ry="3" fill="#bdeacb"/></g>
+              <g opacity=".95"><circle cx="90" cy="4" r="7" fill="#cfe6ff"/></g>
             </g>
-
-            <!-- เทียน -->
             <g id="candles">
-              <g transform="translate(130,114)">
-                <rect width="16" height="40" rx="4" fill="#cfe6ff"/><rect x="6" y="-8" width="4" height="8" fill="#666"/>
-                <path class="flame" data-flame fill="#ffd166" d="M8 -18 q8 10 0 18 q-8-8 0-18"/>
-              </g>
-              <g transform="translate(170,112)">
-                <rect width="16" height="42" rx="4" fill="#ffd6e7"/><rect x="6" y="-8" width="4" height="8" fill="#666"/>
-                <path class="flame" data-flame fill="#ffb703" d="M8 -18 q8 10 0 18 q-8-8 0-18"/>
-              </g>
-              <g transform="translate(210,110)">
-                <rect width="16" height="44" rx="4" fill="#cfeedd"/><rect x="6" y="-8" width="4" height="8" fill="#666"/>
-                <path class="flame" data-flame fill="#ffd166" d="M8 -18 q8 10 0 18 q-8-8 0-18"/>
-              </g>
-              <g transform="translate(250,112)">
-                <rect width="16" height="42" rx="4" fill="#ffe1ef"/><rect x="6" y="-8" width="4" height="8" fill="#666"/>
-                <path class="flame" data-flame fill="#ffb703" d="M8 -18 q8 10 0 18 q-8-8 0-18"/>
-              </g>
-              <g transform="translate(290,114)">
-                <rect width="16" height="40" rx="4" fill="#d7e6ff"/><rect x="6" y="-8" width="4" height="8" fill="#666"/>
-                <path class="flame" data-flame fill="#ffd166" d="M8 -18 q8 10 0 18 q-8-8 0-18"/>
-              </g>
+              <g transform="translate(130,114)"><rect width="16" height="40" rx="4" fill="#cfe6ff"/><rect x="6" y="-8" width="4" height="8" fill="#666"/><path class="flame" data-flame fill="#ffd166" d="M8 -18 q8 10 0 18 q-8-8 0-18"/></g>
+              <g transform="translate(170,112)"><rect width="16" height="42" rx="4" fill="#ffd6e7"/><rect x="6" y="-8" width="4" height="8" fill="#666"/><path class="flame" data-flame fill="#ffb703" d="M8 -18 q8 10 0 18 q-8-8 0-18"/></g>
+              <g transform="translate(210,110)"><rect width="16" height="44" rx="4" fill="#cfeedd"/><rect x="6" y="-8" width="4" height="8" fill="#666"/><path class="flame" data-flame fill="#ffd166" d="M8 -18 q8 10 0 18 q-8-8 0-18"/></g>
+              <g transform="translate(250,112)"><rect width="16" height="42" rx="4" fill="#ffe1ef"/><rect x="6" y="-8" width="4" height="8" fill="#666"/><path class="flame" data-flame fill="#ffb703" d="M8 -18 q8 10 0 18 q-8-8 0-18"/></g>
+              <g transform="translate(290,114)"><rect width="16" height="40" rx="4" fill="#d7e6ff"/><rect x="6" y="-8" width="4" height="8" fill="#666"/><path class="flame" data-flame fill="#ffd166" d="M8 -18 q8 10 0 18 q-8-8 0-18"/></g>
             </g>
-
-            <!-- ควัน -->
             <g id="smokes" opacity="0"></g>
           </svg>
         </div>
@@ -253,18 +210,17 @@
 
   <!-- Lightbox -->
   <div class="lightbox" id="lightbox">
-    <button id="lbClose">✕</button>
-    <button id="lbPrev">‹</button>
-    <img id="lbImg" src="" alt="">
-    <button id="lbNext">›</button>
+    <button id="lbClose">✕</button><button id="lbPrev">‹</button>
+    <img id="lbImg" src="" alt=""><button id="lbNext">›</button>
   </div>
 
 <script>
-  /* บอลลูน */
+  /* ===== บอลลูน ===== */
   const balloonColors=['#ffd6e7','#bde0fe','#95d5b2','#ffe5a5','#cddafd'];
   const balloonWrap=document.getElementById('balloons');
   for(let i=0;i<22;i++){
-    const b=document.createElement('div'); b.className='balloon';
+    const b=document.createElement('div');
+    b.className='balloon';
     b.style.left=Math.random()*100+'%';
     b.style.background=balloonColors[(Math.random()*balloonColors.length)|0];
     b.style.setProperty('--dur',(18+Math.random()*18)+'s');
@@ -274,7 +230,7 @@
     balloonWrap.appendChild(b);
   }
 
-  /* เค้ก + คอนเฟตตี้ */
+  /* ===== เค้ก + คอนเฟตตี้ ===== */
   const flames=[...document.querySelectorAll('[data-flame]')];
   const smokes=document.getElementById('smokes');
   const confettiCanvas=document.getElementById('confetti');
@@ -297,114 +253,131 @@
   function fireConfetti(){
     pieces.length=0;
     for(let i=0;i<120;i++){
-      pieces.push({x:confettiCanvas.width/2+(Math.random()-.5)*140,y:confettiCanvas.height/2,r:2+Math.random()*4,vx:(Math.random()-.5)*5,vy:-(3+Math.random()*4),g:.08+Math.random()*.08,a:.9,color:['#ffd6e7','#bde0fe','#95d5b2','#ffe5a5','#d6d6ff'][(Math.random()*5)|0]});
+      pieces.push({
+        x:confettiCanvas.width/2+(Math.random()-.5)*140,
+        y:confettiCanvas.height/2,
+        r:2+Math.random()*4,
+        vx:(Math.random()-.5)*5, vy:-(3+Math.random()*4), g:.08+Math.random()*.08, a:.9,
+        color:['#ffd6e7','#bde0fe','#95d5b2','#ffe5a5','#d6d6ff'][(Math.random()*5)|0]
+      });
     }
   }
   (function tick(){
     ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
-    pieces.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;p.a-=.004;ctx.globalAlpha=Math.max(p.a,0);ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.color;ctx.fill();});
+    pieces.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy; p.vy+=p.g; p.a-=.004;
+      ctx.globalAlpha=Math.max(p.a,0);
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle=p.color; ctx.fill();
+    });
     requestAnimationFrame(tick);
   })();
   document.getElementById('blowBtn').addEventListener('click', blowCake);
 
-  /* Lightbox */
+  /* ===== Lightbox ===== */
   const lightbox=document.getElementById('lightbox');
   const lbImg=document.getElementById('lbImg');
   const imgs=[...document.querySelectorAll('#gallery img')];
   let current=0;
-  function openLB(i){
-    current=i; lbImg.src=imgs[i].src; lightbox.classList.add('active'); resetZoom();
-  }
-  function closeLB(){ lightbox.classList.remove('active'); }
-  function nextLB(n){ current=(current+n+imgs.length)%imgs.length; lbImg.src=imgs[current].src; resetZoom(); }
+  function openLB(i){current=i;lbImg.src=imgs[i].src;lightbox.classList.add('active');resetZoom();}
+  function closeLB(){lightbox.classList.remove('active');}
+  function nextLB(n){current=(current+n+imgs.length)%imgs.length;lbImg.src=imgs[current].src;resetZoom();}
   imgs.forEach((img,i)=>img.addEventListener('click',()=>openLB(i)));
-  document.getElementById('lbClose').onclick=closeLB;
-  document.getElementById('lbPrev').onclick=()=>nextLB(-1);
-  document.getElementById('lbNext').onclick=()=>nextLB(1);
+  lbClose.onclick=closeLB; lbPrev.onclick=()=>nextLB(-1); lbNext.onclick=()=>nextLB(1);
   lightbox.addEventListener('click',e=>{if(e.target===lightbox)closeLB();});
-  window.addEventListener('keydown',e=>{
-    if(!lightbox.classList.contains('active')) return;
-    if(e.key==='Escape') closeLB();
-    if(e.key==='ArrowLeft') nextLB(-1);
-    if(e.key==='ArrowRight') nextLB(1);
-  });
-
-  /* ซูม + ปัดมือถือ */
-  let scale=1, originX=0, originY=0;
-  function applyZoom(){lbImg.style.transform=`scale(${scale})`;lbImg.style.transformOrigin=`${originX}px ${originY}px`;}
-  function resetZoom(){scale=1;lbImg.style.transform='none';}
-  lbImg.addEventListener('wheel',e=>{
-    e.preventDefault();
-    const rect=lbImg.getBoundingClientRect();
-    originX=e.clientX-rect.left; originY=e.clientY-rect.top;
-    const delta=Math.sign(e.deltaY)*0.1;
-    scale=Math.min(3,Math.max(1,scale-delta)); applyZoom();
-  },{passive:false});
+  window.addEventListener('keydown',e=>{if(!lightbox.classList.contains('active'))return; if(e.key==='Escape')closeLB(); if(e.key==='ArrowLeft')nextLB(-1); if(e.key==='ArrowRight')nextLB(1);});
+  let scale=1, originX=0, originY=0; function applyZoom(){lbImg.style.transform=`scale(${scale})`;lbImg.style.transformOrigin=`${originX}px ${originY}px`;} function resetZoom(){scale=1;lbImg.style.transform='none';}
+  lbImg.addEventListener('wheel',e=>{e.preventDefault();const r=lbImg.getBoundingClientRect();originX=e.clientX-r.left;originY=e.clientY-r.top;const d=Math.sign(e.deltaY)*0.1;scale=Math.min(3,Math.max(1,scale-d));applyZoom();},{passive:false});
   lbImg.addEventListener('dblclick',resetZoom);
-  let tx=0,ty=0,t0=0;
-  lbImg.addEventListener('touchstart',e=>{const t=e.changedTouches[0];tx=t.clientX;ty=t.clientY;t0=Date.now();},{passive:true});
-  lbImg.addEventListener('touchend',e=>{
-    const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty,dt=Date.now()-t0;
-    if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy) && dt<600){
-      if(dx<0)nextLB(1);else nextLB(-1);
-    }
-  },{passive:true});
 
-  /* ไมค์เป่าเค้ก */
-  {
-    const micBtn = document.getElementById('micBtn');
-    let micActive = false, stream = null, audioCtx = null, analyser = null, rafId = null;
-
-    function isSecureOrigin(){
-      const isHttps = location.protocol === 'https:';
-      const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-      return isHttps || isLocal;
-    }
-
-    async function startMic(){
-      if(!isSecureOrigin()){
-        alert('ต้องเปิดผ่าน HTTPS หรือ localhost เท่านั้น เบราว์เซอร์จึงจะอนุญาตไมค์นะคะ 💡');
-        return;
-      }
+  /* ===== ไมค์เป่าเค้ก ===== */
+  {const micBtn=document.getElementById('micBtn'); let on=false,stream=null,audioCtx=null,analyser=null,raf=null;
+    function secure(){return location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1';}
+    async function start(){ if(!secure()){alert('ต้องเปิดผ่าน HTTPS หรือ localhost เท่านั้นค่ะ');return;}
       try{
-        stream = await navigator.mediaDevices.getUserMedia({ audio:true });
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const src = audioCtx.createMediaStreamSource(stream);
-        analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 1024;
-        src.connect(analyser);
-
-        const data = new Uint8Array(analyser.frequencyBinCount);
-        micActive = true;
-        micBtn.textContent = 'ปิดไมค์';
-        micBtn.classList.add('brand');
-
-        const threshold = 70;
+        stream=await navigator.mediaDevices.getUserMedia({audio:true});
+        audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+        const src=audioCtx.createMediaStreamSource(stream);
+        analyser=audioCtx.createAnalyser(); analyser.fftSize=1024; src.connect(analyser);
+        const data=new Uint8Array(analyser.frequencyBinCount); on=true; micBtn.textContent='ปิดไมค์'; micBtn.classList.add('brand'); const th=70;
         (function listen(){
-          analyser.getByteFrequencyData(data);
-          let sum=0,c=0; for(let i=32;i<data.length;i++){ sum+=data[i]; c++; }
-          if(sum/Math.max(1,c) > threshold){
-            if(typeof blowCake === 'function') blowCake();
-          }
-          if(micActive) rafId = requestAnimationFrame(listen);
+          analyser.getByteFrequencyData(data); let s=0,c=0; for(let i=32;i<data.length;i++){s+=data[i];c++;}
+          if(s/Math.max(1,c)>th) blowCake();
+          if(on) raf=requestAnimationFrame(listen);
         })();
-      }catch(err){
-        alert('เปิดไมค์ไม่สำเร็จ — คุณยังสามารถกด “เป่าเค้ก 🎉” ได้ค่ะ');
-        stopMic();
-      }
-    }
-
-    function stopMic(){
-      micActive = false;
-      if(rafId) cancelAnimationFrame(rafId), rafId=null;
-      if(stream){ stream.getTracks().forEach(t=>t.stop()); stream=null; }
-      if(audioCtx){ audioCtx.close(); audioCtx=null; }
-      micBtn.textContent = 'เปิดไมโครโฟนเพื่อเป่า';
-      micBtn.classList.remove('brand');
-    }
-
-    micBtn.addEventListener('click', ()=> micActive ? stopMic() : startMic());
+      }catch{
+        alert('เปิดไมค์ไม่สำเร็จ — กด “เป่าเค้ก 🎉” แทนได้ค่ะ'); stop();
+      }}
+    function stop(){ on=false; if(raf) cancelAnimationFrame(raf),raf=null; if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;} if(audioCtx){audioCtx.close();audioCtx=null;} micBtn.textContent='เปิดไมโครโฟนเพื่อเป่า'; micBtn.classList.remove('brand');}
+    micBtn.addEventListener('click',()=> on?stop():start());
   }
+
+  /* ===== Carousel Logic (Auto Slide + Swipe) ===== */
+  (function(){
+    const slider = document.getElementById('slider');
+    const slides = [...slider.querySelectorAll('.slide')];
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const dotsWrap = document.getElementById('dots');
+    const gallery = document.getElementById('gallery');
+
+    let index = 0, timer = null, INTERVAL = 5000;
+
+    // จุดสถานะ
+    slides.forEach((_,i)=>{
+      const d=document.createElement('div');
+      d.className='dot'+(i===0?' active':'');
+      d.addEventListener('click',()=>go(i,true));
+      dotsWrap.appendChild(d);
+    });
+    const dots = [...dotsWrap.children];
+
+    function update(){
+      slider.style.transform = `translateX(${-index*100}%)`;
+      dots.forEach((d,i)=>d.classList.toggle('active', i===index));
+    }
+    function go(i, resetAuto){
+      index = (i + slides.length) % slides.length;
+      update();
+      if(resetAuto) restart();
+    }
+    function next(){ go(index+1,true); }
+    function prev(){ go(index-1,true); }
+
+    function start(){ if (timer) return; timer = setInterval(()=>go(index+1,false), INTERVAL); }
+    function stop(){ clearInterval(timer); timer = null; }
+    function restart(){ stop(); start(); }
+
+    // ปุ่ม
+    nextBtn.addEventListener('click', next);
+    prevBtn.addEventListener('click', prev);
+
+    // หยุดชั่วคราวเมื่อโฮเวอร์/โฟกัส
+    gallery.addEventListener('mouseenter', stop);
+    gallery.addEventListener('mouseleave', start);
+    gallery.addEventListener('focusin', stop);
+    gallery.addEventListener('focusout', start);
+
+    // สไลด์ด้วยนิ้ว/เมาส์ (pointer)
+    let startX=0, dx=0, touching=false;
+    slider.addEventListener('pointerdown', (e)=>{
+      touching=true; startX=e.clientX; dx=0; slider.style.transition='none'; stop();
+    });
+    window.addEventListener('pointermove', (e)=>{
+      if(!touching) return;
+      dx = e.clientX - startX;
+      slider.style.transform = `translateX(calc(${-index*100}% + ${dx}px))`;
+    });
+    window.addEventListener('pointerup', ()=>{
+      if(!touching) return; touching=false; slider.style.transition='';
+      const threshold = Math.min(120, window.innerWidth*0.15);
+      if (dx < -threshold) next(); else if (dx > threshold) prev(); else update();
+      start();
+    });
+
+    // เริ่มทำงาน
+    update(); start();
+    window.addEventListener('resize', update);
+  })();
 </script>
 </body>
 </html>
