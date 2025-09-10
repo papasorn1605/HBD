@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Happy Birthday — Intro</title>
+<style>
+  :root{
+    --bg1:#fbfbff; --bg2:#f2f6ff; --card:#ffffff;
+    --ink:#2d2a32; --muted:#7a7a8c;
+    --p1:#ffd6e7; --p2:#bde0fe; --p3:#95d5b2; --p4:#ffe5a5;
+    --shadow:0 18px 50px rgba(25,23,40,.12);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:ui-rounded,system-ui,"Segoe UI",Poppins,sans-serif;color:var(--ink);background:linear-gradient(180deg,var(--bg1),var(--bg2))}
+  .wrap{min-height:100%;display:grid;place-items:center;padding:24px}
+  .card{
+    width:min(560px,92vw);
+    background:var(--card);
+    border:1px solid rgba(0,0,0,.06);
+    border-radius:28px;
+    padding:28px 22px 22px;
+    box-shadow:var(--shadow);
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .sub{color:var(--muted);font-size:14px;margin-top:6px}
+  .btn{
+    appearance:none;border:1px solid rgba(0,0,0,.08);background:var(--card);
+    padding:12px 16px;border-radius:14px;font-weight:700;cursor:pointer;
+    box-shadow:var(--shadow);position:relative;overflow:hidden;
+    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    margin-top:16px;
+  }
+  .btn::after{
+    content:"";position:absolute;inset:0;background:linear-gradient(120deg,#ffffffa0,#ffffff00 40%);
+    transform:translateX(-120%);transition:transform .45s ease;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(189,224,254,.28),var(--shadow);border-color:rgba(0,0,0,.12)}
+  .btn:hover::after{transform:translateX(0)}
+  /* Icon stage */
+  .stage{display:grid;place-items:center;margin:6px auto 10px; position:relative}
+  svg{display:block;max-width:240px;width:72vw;height:auto}
+  .glow{
+    filter: drop-shadow(0 2px 12px rgba(189,224,254,.65))
+            drop-shadow(0 2px 18px rgba(255,214,231,.65));
+  }
+  /* Stroke draw animation */
+  .draw{
+    stroke:#7a7a8c;stroke-width:6;fill:none;stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:var(--len,600);stroke-dashoffset:var(--len,600);
+    animation:draw 1.6s ease forwards;
+  }
+  .delay-1{ animation-delay:.2s }
+  .delay-2{ animation-delay:.4s }
+  .delay-3{ animation-delay:.6s }
+  @keyframes draw{to{stroke-dashoffset:0}}
+  /* Candle flames */
+  .fl{ fill:#ffd166; transform-origin:center; animation:wiggle .2s infinite alternate; }
+  @keyframes wiggle{from{transform:translateY(0)} to{transform:translateY(-1.2px)}}
+  /* pastel orbs floating */
+  .orb{position:absolute;border-radius:50%;opacity:.55;filter:blur(1px);animation:float var(--dur) linear infinite}
+  .o1{width:16px;height:16px; background:var(--p1); left:14%; top:18%; --dur:12s}
+  .o2{width:20px;height:20px; background:var(--p2); right:12%; top:26%; --dur:14s; animation-delay:-3s}
+  .o3{width:14px;height:14px; background:var(--p3); left:18%; bottom:12%; --dur:11s; animation-delay:-2s}
+  .o4{width:18px;height:18px; background:var(--p4); right:16%; bottom:10%; --dur:15s; animation-delay:-1s}
+  @keyframes float{to{transform:translateY(-18px)}}
+  h1{font-size: clamp(22px,4.8vw,32px); margin:10px 0 0}
+  .chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0 0}
+  .chip{font-size:12px;font-weight:700;padding:6px 10px;border-radius:999px;background:linear-gradient(120deg,var(--p4),var(--p1))}
+  footer{margin-top:12px;color:var(--muted);font-size:12px;text-align:center}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="stage">
+        <!-- floating pastel orbs -->
+        <span class="orb o1"></span><span class="orb o2"></span>
+        <span class="orb o3"></span><span class="orb o4"></span>
+
+        <!-- Minimal line icon (เค้ก + จาน + ริบบอน) -->
+        <svg viewBox="0 0 220 200" class="glow" aria-label="birthday icon">
+          <!-- plate -->
+          <ellipse cx="110" cy="168" rx="60" ry="8" fill="#e6eefb"/>
+          <!-- cake body outline (draw) -->
+          <path class="draw" style="--len:520"
+            d="M55 150 v-44 a12 12 0 0 1 12-12 h86 a12 12 0 0 1 12 12 v44 
+               m-110 0 h110" />
+          <!-- icing waves -->
+          <path class="draw delay-1" style="--len:340"
+            d="M55 116 
+               c10 10 18 10 28 0
+               s18-10 28 0
+               s18 10 28 0
+               s18-10 28 0" />
+          <!-- candles -->
+          <path class="draw delay-2" style="--len:140" d="M80 92 v12 M110 90 v14 M140 92 v12" />
+          <!-- flames -->
+          <g>
+            <path class="fl delay-3" d="M80 86 q5 6 0 12 q-5-6 0-12"/>
+            <path class="fl delay-3" d="M110 84 q5 6 0 12 q-5-6 0-12"/>
+            <path class="fl delay-3" d="M140 86 q5 6 0 12 q-5-6 0-12"/>
+          </g>
+          <!-- confetti sparks (static) -->
+          <g opacity=".55">
+            <circle cx="48" cy="70" r="2.5" fill="#bde0fe"/>
+            <circle cx="170" cy="68" r="2.5" fill="#ffd6e7"/>
+            <rect x="34" y="96" width="3" height="3" fill="#95d5b2" rx="1"/>
+            <rect x="182" y="110" width="3" height="3" fill="#ffe5a5" rx="1"/>
+          </g>
+        </svg>
+      </div>
+
+      <h1>Happy Birthday</h1>
+      <p class="sub">ขอให้วันนี้เต็มไปด้วยรอยยิ้มและเซอร์ไพรส์ดี ๆ 🎉</p>
+
+      <div class="chips">
+        <span class="chip">Minimal</span>
+        <span class="chip">Pastel</span>
+        <span class="chip">Cute</span>
+      </div>
+
+      <button class="btn" id="enterBtn">เข้าสู่หน้าเว็บ →</button>
+      <footer>* จะเข้าสู่หน้าเว็บอัตโนมัติภายใน ~2.5 วินาที</footer>
+    </div>
+  </div>
+
+<script>
+  // กดปุ่มเข้าเว็บ
+  const go = ()=>location.href = 'index.html';
+  document.getElementById('enterBtn').addEventListener('click', go);
+  // auto เข้าเว็บ
+  setTimeout(go, 2500);
+</script>
+</body>
+</html>
