@@ -14,7 +14,7 @@
   html,body{margin:0;font-family:ui-rounded,system-ui,"Segoe UI",Poppins,sans-serif;color:var(--ink);background:linear-gradient(180deg,#fbfbff,#f2f6ff 40%,#fff)}
   a{color:inherit;text-decoration:none}
 
-  /* Header กว้างขึ้นและเว้นขอบ */
+  /* Header */
   header{
     position:sticky; top:0; z-index:10;
     backdrop-filter:saturate(1.4) blur(8px);
@@ -27,7 +27,7 @@
   .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(45deg,var(--brand),var(--brand-2));box-shadow:0 0 0 6px rgba(149,213,178,.18)}
   nav{display:flex;gap:10px}
 
-  /* ปุ่ม + hover */
+  /* ปุ่ม */
   .btn{
     appearance:none;border:1px solid rgba(0,0,0,.08);background:var(--card);
     padding:10px 14px;border-radius:14px;font-weight:600;cursor:pointer;
@@ -40,7 +40,7 @@
   .btn.brand{background:linear-gradient(120deg,var(--brand-2),var(--brand-3));border:none}
   .btn.brand:hover{box-shadow:0 14px 28px rgba(189,224,254,.28),var(--shadow)}
 
-  /* Layout ใหญ่ขึ้น */
+  /* Layout */
   .wrap{max-width:1280px;margin:0 auto;padding:clamp(16px,2.4vw,28px)}
   section{padding:56px 0}
   .grid{display:grid;grid-template-columns:1.25fr .85fr;gap:32px}
@@ -50,14 +50,12 @@
   h1{font-size:clamp(28px,4vw,44px);margin:8px 0 10px;line-height:1.1}
   p.lead{color:var(--muted);margin:0 0 18px}
 
-  /* === CUTE GALLERY (Polaroid + Washi Tape) === */
+  /* Gallery */
   .gallery-grid{
     display:grid; gap:18px;
-    grid-template-columns: repeat(3, minmax(0,1fr));
+    grid-template-columns: repeat(2, minmax(0,1fr));
   }
-  @media (min-width:1600px){ .gallery-grid{ grid-template-columns: repeat(4, 1fr); } }
-  @media (max-width:980px){ .gallery-grid{ grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width:560px){ .gallery-grid{ grid-template-columns: 1fr; } }
+  @media (max-width:768px){ .gallery-grid{grid-template-columns:1fr} }
 
   .polaroid{
     position:relative; border-radius:18px; overflow:visible;
@@ -66,8 +64,9 @@
     transition: transform .22s ease, box-shadow .22s ease, filter .22s ease;
   }
   .polaroid img{
-    width:100%; aspect-ratio:1/1; object-fit:cover; display:block;
+    width:100%; aspect-ratio:4/3; object-fit:cover; display:block;
     border-radius:12px; box-shadow:0 4px 12px rgba(25,23,40,.10) inset;
+    cursor:zoom-in;
   }
   .polaroid::before{
     content:""; position:absolute; left:50%; top:-10px; translate:-50% 0;
@@ -77,85 +76,90 @@
   }
   .polaroid figcaption{
     position:absolute; left:0; right:0; bottom:10px;
-    text-align:center; font-size:12px; color:#6e6e82; letter-spacing:.2px;
+    text-align:center; font-size:14px; color:#6e6e82; letter-spacing:.2px;
   }
-  .polaroid:hover{
-    transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 18px 36px rgba(173,217,255,.28), 0 10px 28px rgba(25,23,40,.12);
-  }
-  .polaroid:hover img{ filter: saturate(1.06) brightness(1.02); }
+  .polaroid:hover{ transform: translateY(-6px) scale(1.02); box-shadow: 0 18px 36px rgba(173,217,255,.28), 0 10px 28px rgba(25,23,40,.12) }
+  .polaroid:hover img{ filter: saturate(1.06) brightness(1.02) }
 
-  /* เค้ก: โทนพาสเทลนุ่ม + ใหญ่มองเต็มตา */
+  /* Cake */
   .cake-area{position:relative;background:linear-gradient(180deg,#fff,#fff8fb);border-radius:24px;padding:24px;box-shadow:0 14px 40px rgba(149,213,178,.12),var(--shadow)}
   .stage{display:grid;place-items:center;min-height:420px;position:relative}
   .hint-breath{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.9);border:1px solid rgba(0,0,0,.06);padding:8px 10px;border-radius:12px;font-size:12px;color:#666}
   canvas#confetti{position:absolute;inset:0;pointer-events:none;z-index:0}
   #cakeSvg{position:relative;z-index:1;display:block;max-width:100%;height:auto}
-
   .flame{transform-origin:center;animation:wiggle .2s infinite alternate}
   @keyframes wiggle{from{transform:translateY(0)} to{transform:translateY(-1.2px)}}
   .smoke{opacity:0;animation:smokeUp 1.5s ease-out forwards}
   @keyframes smokeUp{from{opacity:0;transform:translateY(0)} 30%{opacity:.9} to{opacity:0;transform:translateY(-50px)}}
 
-  /* บอลลูนลอย */
+  /* Balloon */
   .balloon-wrap{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
   .balloon{position:absolute;bottom:-120px;width:24px;height:32px;border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;opacity:.35;animation:float var(--dur) linear infinite;filter:blur(.2px)}
   .balloon::after{content:"";position:absolute;left:50%;top:30px;width:1px;height:60px;background:rgba(0,0,0,.12)}
   @keyframes float{to{transform:translateY(-120vh)}}
 
   footer{padding:34px 0 80px;color:#777;text-align:center}
+
+  /* Lightbox */
+  .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:1000}
+  .lightbox img{max-width:90%;max-height:90%;border-radius:12px;box-shadow:0 0 20px rgba(0,0,0,.5);transition:transform .3s ease}
+  .lightbox.active{display:flex}
+  .lightbox button{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.6);border:none;border-radius:50%;width:40px;height:40px;cursor:pointer}
+  .lightbox #lbPrev{left:20px}
+  .lightbox #lbNext{right:20px}
+  .lightbox #lbClose{top:20px;right:20px;transform:none}
 </style>
 </head>
 <body>
-  <!-- บอลลูนลอย -->
+  <!-- บอลลูน -->
   <div class="balloon-wrap" id="balloons"></div>
 
   <header>
     <div class="inner">
-      <div class="logo"><span class="dot"></span>Happy Birthday 🎂</div>
+      <div class="logo"><span class="dot"></span>วันของครูชลลี่</div>
       <nav><a class="btn brand" href="wishes.html">ไปหน้าคำอวยพร →</a></nav>
     </div>
   </header>
 
   <main class="wrap" id="top">
     <section class="grid">
-      <!-- ซ้าย: แกลเลอรีโพลารอยด์ -->
+      <!-- ซ้าย: แกลเลอรี -->
       <div class="card">
         <h1>อัลบั้มวันพิเศษ</h1>
-        <p class="lead">😾</p>
-        <div class="gallery-grid">
+        <p class="lead">รวมโมเมนต์ดี ๆ ของครูชลลี่ ✨</p>
+        <div class="gallery-grid" id="gallery">
           <figure class="polaroid" style="--tape:linear-gradient(120deg,#ffd6e7,#bde0fe)">
-            <img src="/assets/photo1.jpg" alt="รูป 1" loading="lazy">
-            <figcaption>วันดี ๆ ของเรา</figcaption>
+            <img src="/assets/photo1.jpg" alt="รูป 1" loading="lazy" data-caption="วันดี ๆ">
+            <figcaption>วันดี ๆ </figcaption>
           </figure>
           <figure class="polaroid" style="--tape:linear-gradient(120deg,#ffe5a5,#cddafd)">
-            <img src="/assets/photo2.jpg" alt="รูป 2" loading="lazy">
-            <figcaption>ยิ้มหน่อยน้า 😊</figcaption>
+            <img src="/assets/photo2.jpg" alt="รูป 2" loading="lazy" data-caption="ยิ้มหน่อยน้า">
+            <figcaption>ยิ้มหน่อยน้า </figcaption>
           </figure>
           <figure class="polaroid" style="--tape:linear-gradient(120deg,#bde0fe,#95d5b2)">
-            <img src="/assets/photo3.jpg" alt="รูป 3" loading="lazy">
+            <img src="/assets/photo3.jpg" alt="รูป 3" loading="lazy" data-caption="ความทรงจำพิเศษ">
             <figcaption>ความทรงจำพิเศษ</figcaption>
           </figure>
           <figure class="polaroid" style="--tape:linear-gradient(120deg,#ffc8dd,#ffd6e7)">
-            <img src="/assets/photo4.jpg" alt="รูป 4" loading="lazy">
+            <img src="/assets/photo4.jpg" alt="รูป 4" loading="lazy" data-caption="Happy Moment ✨">
             <figcaption>Happy Moment ✨</figcaption>
           </figure>
         </div>
       </div>
 
-      <!-- ขวา: เค้ก (คงเดิมตามที่ให้มา) -->
+      <!-- ขวา: เค้ก -->
       <div class="cake-area card" id="cake">
         <div class="hint-breath">พูดว่า “ฟู่วว” ใส่ไมค์ หรือกดปุ่ม “เป่าเค้ก”</div>
         <div class="stage">
           <canvas id="confetti"></canvas>
 
-          <!-- 🎂 เค้กของเดิม (ไม่แก้ไข) -->
+          <!-- 🎂 เค้ก (SVG เต็ม) -->
           <svg id="cakeSvg" width="420" viewBox="0 0 420 360" aria-label="birthday cake">
             <!-- จาน -->
             <ellipse cx="210" cy="318" rx="160" ry="18" fill="#eaf2ff"/>
             <ellipse cx="210" cy="312" rx="150" ry="16" fill="#f6fbff" />
 
-            <!-- ชั้นล่าง (วานิลลาอ่อน) -->
+            <!-- ชั้นล่าง -->
             <g transform="translate(45,150)">
               <rect width="330" height="120" rx="26" fill="#fff0c9" stroke="#f2d9a6"/>
               <rect x="12" y="62" width="306" height="20" rx="10" fill="#fff6df"/>
@@ -178,7 +182,7 @@
               </linearGradient>
             </defs>
 
-            <!-- สปริงเกิลส์พาสเทล -->
+            <!-- สปริงเกิลส์ -->
             <g opacity=".75">
               <rect x="120" y="180" width="6" height="3" fill="#bde0fe"/>
               <circle cx="170" cy="196" r="3" fill="#ffb3c1"/>
@@ -186,7 +190,7 @@
               <circle cx="260" cy="186" r="3" fill="#ffc8dd"/>
             </g>
 
-            <!-- ท็อปปิ้งครีม + เบอร์รี่จิ๋ว -->
+            <!-- ท็อปปิ้ง -->
             <g transform="translate(80,96)">
               <g opacity=".95">
                 <ellipse cx="30" cy="24" rx="16" ry="10" fill="#fff9f3"/>
@@ -207,7 +211,7 @@
               </g>
             </g>
 
-            <!-- เทียน (โทนอ่อน) -->
+            <!-- เทียน -->
             <g id="candles">
               <g transform="translate(130,114)">
                 <rect width="16" height="40" rx="4" fill="#cfe6ff"/><rect x="6" y="-8" width="4" height="8" fill="#666"/>
@@ -247,8 +251,16 @@
 
   <footer>Made by Milk</footer>
 
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button id="lbClose">✕</button>
+    <button id="lbPrev">‹</button>
+    <img id="lbImg" src="" alt="">
+    <button id="lbNext">›</button>
+  </div>
+
 <script>
-  /* บอลลูนลอย */
+  /* บอลลูน */
   const balloonColors=['#ffd6e7','#bde0fe','#95d5b2','#ffe5a5','#cddafd'];
   const balloonWrap=document.getElementById('balloons');
   for(let i=0;i<22;i++){
@@ -262,7 +274,7 @@
     balloonWrap.appendChild(b);
   }
 
-  /* เค้ก + คอนเฟตตี้ (เหมือนเดิม) */
+  /* เค้ก + คอนเฟตตี้ */
   const flames=[...document.querySelectorAll('[data-flame]')];
   const smokes=document.getElementById('smokes');
   const confettiCanvas=document.getElementById('confetti');
@@ -295,7 +307,50 @@
   })();
   document.getElementById('blowBtn').addEventListener('click', blowCake);
 
-  /* ===== ไมค์เป่าเค้ก (เสถียร + Toggle) ===== */
+  /* Lightbox */
+  const lightbox=document.getElementById('lightbox');
+  const lbImg=document.getElementById('lbImg');
+  const imgs=[...document.querySelectorAll('#gallery img')];
+  let current=0;
+  function openLB(i){
+    current=i; lbImg.src=imgs[i].src; lightbox.classList.add('active'); resetZoom();
+  }
+  function closeLB(){ lightbox.classList.remove('active'); }
+  function nextLB(n){ current=(current+n+imgs.length)%imgs.length; lbImg.src=imgs[current].src; resetZoom(); }
+  imgs.forEach((img,i)=>img.addEventListener('click',()=>openLB(i)));
+  document.getElementById('lbClose').onclick=closeLB;
+  document.getElementById('lbPrev').onclick=()=>nextLB(-1);
+  document.getElementById('lbNext').onclick=()=>nextLB(1);
+  lightbox.addEventListener('click',e=>{if(e.target===lightbox)closeLB();});
+  window.addEventListener('keydown',e=>{
+    if(!lightbox.classList.contains('active')) return;
+    if(e.key==='Escape') closeLB();
+    if(e.key==='ArrowLeft') nextLB(-1);
+    if(e.key==='ArrowRight') nextLB(1);
+  });
+
+  /* ซูม + ปัดมือถือ */
+  let scale=1, originX=0, originY=0;
+  function applyZoom(){lbImg.style.transform=`scale(${scale})`;lbImg.style.transformOrigin=`${originX}px ${originY}px`;}
+  function resetZoom(){scale=1;lbImg.style.transform='none';}
+  lbImg.addEventListener('wheel',e=>{
+    e.preventDefault();
+    const rect=lbImg.getBoundingClientRect();
+    originX=e.clientX-rect.left; originY=e.clientY-rect.top;
+    const delta=Math.sign(e.deltaY)*0.1;
+    scale=Math.min(3,Math.max(1,scale-delta)); applyZoom();
+  },{passive:false});
+  lbImg.addEventListener('dblclick',resetZoom);
+  let tx=0,ty=0,t0=0;
+  lbImg.addEventListener('touchstart',e=>{const t=e.changedTouches[0];tx=t.clientX;ty=t.clientY;t0=Date.now();},{passive:true});
+  lbImg.addEventListener('touchend',e=>{
+    const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty,dt=Date.now()-t0;
+    if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy) && dt<600){
+      if(dx<0)nextLB(1);else nextLB(-1);
+    }
+  },{passive:true});
+
+  /* ไมค์เป่าเค้ก */
   {
     const micBtn = document.getElementById('micBtn');
     let micActive = false, stream = null, audioCtx = null, analyser = null, rafId = null;
@@ -308,7 +363,7 @@
 
     async function startMic(){
       if(!isSecureOrigin()){
-        alert('ต้องเปิดผ่าน HTTPS หรือ localhost เท่านั้น เบราว์เซอร์จึงจะอนุญาตไมค์นะคะ 💡\nแนะนำอัพขึ้น GitHub Pages / Vercel หรือรันที่ http://localhost');
+        alert('ต้องเปิดผ่าน HTTPS หรือ localhost เท่านั้น เบราว์เซอร์จึงจะอนุญาตไมค์นะคะ 💡');
         return;
       }
       try{
@@ -324,7 +379,7 @@
         micBtn.textContent = 'ปิดไมค์';
         micBtn.classList.add('brand');
 
-        const threshold = 70; // ปรับความไวได้
+        const threshold = 70;
         (function listen(){
           analyser.getByteFrequencyData(data);
           let sum=0,c=0; for(let i=32;i<data.length;i++){ sum+=data[i]; c++; }
@@ -334,12 +389,7 @@
           if(micActive) rafId = requestAnimationFrame(listen);
         })();
       }catch(err){
-        console.error(err);
-        let msg = 'เปิดไมค์ไม่สำเร็จ 😿 ';
-        if(err.name === 'NotAllowedError') msg += 'ผู้ใช้ไม่อนุญาตการใช้ไมค์';
-        else if(err.name === 'NotFoundError') msg += 'ไม่พบอุปกรณ์ไมโครโฟน';
-        else msg += 'เบราว์เซอร์บล็อกไว้หรือสิทธิ์ไม่พร้อม';
-        alert(msg + '\nคุณยังสามารถกด “เป่าเค้ก 🎉” เพื่อเล่นเอฟเฟกต์ได้ค่ะ');
+        alert('เปิดไมค์ไม่สำเร็จ — คุณยังสามารถกด “เป่าเค้ก 🎉” ได้ค่ะ');
         stopMic();
       }
     }

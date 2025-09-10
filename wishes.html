@@ -19,7 +19,7 @@
     a{color:inherit; text-decoration:none}
     .wrap{max-width:900px; margin:0 auto; padding:24px; position:relative; z-index:1}
 
-    /* พื้นหลังฟองพาสเทลลอยเบา ๆ */
+    /* พื้นหลังฟองพาสเทล */
     .bg-bubbles{position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden}
     .bubble{position:absolute; border-radius:50%; opacity:.28; filter:blur(.3px); animation:floatUp linear infinite}
     @keyframes floatUp{0%{transform:translateY(110vh) scale(.9)}100%{transform:translateY(-10vh) scale(1)}}
@@ -45,7 +45,7 @@
     .lead{color:var(--muted)}
     .toolbar{display:flex; gap:8px; flex-wrap:wrap; margin:14px 0 10px}
 
-    /* กรอบคำอวยพร (คงทรงเดิม + เพิ่มริบบิ้นวิ้งเบา ๆ ด้านหลัง) */
+    /* กรอบคำอวยพร */
     .wish-block{position:relative; overflow:hidden}
     .wish-block::before{
       content:""; position:absolute; inset:-20% -10%;
@@ -73,6 +73,8 @@
     .tonearm{position:absolute; right:18%; top:6%; width:110px; height:10px; background:#333; transform-origin:0 50%; border-radius:6px; box-shadow:0 2px 6px rgba(0,0,0,.2); transform:rotate(-8deg)}
     .row{display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
 
+    /* Visualizer */
+    #vizCanvas{width:min(86vw,640px); height:70px; display:block; border-radius:12px; background:linear-gradient(180deg,#ffffff80,#ffffff40); box-shadow:inset 0 0 0 1px rgba(0,0,0,.05)}
     footer{padding:30px 0 60px; text-align:center; color:#777}
   </style>
 </head>
@@ -83,7 +85,7 @@
 
   <main class="wrap">
     <header class="topbar">
-      <h1 style="margin:0">💌  แฮป ๆ หมิมี๊</h1>
+      <h1 style="margin:0">💌 คำอวยพร</h1>
       <a class="btn" href="index.html">← กลับหน้าแรก</a>
     </header>
 
@@ -98,11 +100,12 @@
           </div>
           <div class="tonearm" id="tonearm"></div>
         </div>
+        <canvas id="vizCanvas" aria-hidden="true"></canvas>
         <div class="row">
           <button class="btn brand" id="togglePlay">▶ เล่นเพลง</button>
           <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8" aria-label="Volume">
         </div>
-        <p class="lead" style="margin:0">เพลง</b> คำอวยพร</p>
+        <p class="lead" style="margin:0">เพลง + คำอวยพร</p>
         <audio id="audio" preload="auto">
           <source src="song.mp3" type="audio/mpeg" />
         </audio>
@@ -113,7 +116,9 @@
     <section class="card" style="margin-top:18px">
       <div class="toolbar">
         <button class="btn" id="randomWish">สุ่มคำอวยพร</button>
+        <button class="btn" id="autoToggle">🎲 สุ่มอัตโนมัติ: ปิด</button>
         <button class="btn brand" id="copyWish">คัดลอกข้อความ</button>
+        <button class="btn" id="shareWish">แชร์</button>
       </div>
       <div class="wish-block">
         <div class="wish-text" id="wishText" contenteditable>
@@ -144,12 +149,35 @@
       bubbles.appendChild(b);
     }
 
-    /* มินิเพลเยอร์ */
+    /* มินิเพลเยอร์ + Visualizer + Volume (GainNode) */
     const audio=document.getElementById('audio');
     const disc=document.getElementById('disc');
     const toggle=document.getElementById('togglePlay');
     const vol=document.getElementById('volume');
     const tone=document.getElementById('tonearm');
+    const viz=document.getElementById('vizCanvas');
+    const vctx=viz.getContext('2d');
+
+    function fitCanvas(){ viz.width=viz.clientWidth; viz.height=viz.clientHeight; }
+    addEventListener('resize', fitCanvas); fitCanvas();
+
+    let ac, analyser, gainNode, raf;
+
+    async function ensureAudioGraph(){
+      if(ac) return;
+      ac = new (window.AudioContext||window.webkitAudioContext)();
+      analyser = ac.createAnalyser();
+      analyser.fftSize = 512;
+
+      gainNode = ac.createGain();
+      gainNode.gain.value = +vol.value;           // ตั้งค่าเริ่มต้นตามสไลเดอร์
+
+      const track = ac.createMediaElementSource(audio);
+      // track → analyser → gain → destination
+      track.connect(analyser);
+      analyser.connect(gainNode);
+      gainNode.connect(ac.destination);
+    }
 
     function setPaused(p){
       disc.style.animationPlayState=p?'paused':'running';
@@ -158,19 +186,51 @@
     }
     setPaused(true);
 
+    function drawViz(){
+      const buffer = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(buffer);
+      vctx.clearRect(0,0,viz.width,viz.height);
+      const nBars = 48, gap = 4;
+      const barW = (viz.width - (nBars-1)*gap)/nBars;
+      for(let i=0;i<nBars;i++){
+        const v = buffer[Math.floor(i*buffer.length/nBars)];
+        const h = (v/255) * viz.height;
+        const x = i*(barW+gap);
+        const y = viz.height - h;
+        vctx.fillStyle = `rgba(189,224,254,.9)`;
+        vctx.fillRect(x,y,barW,h);
+        vctx.fillStyle = 'rgba(255,214,231,.9)';
+        vctx.fillRect(x, y-3, barW, 3);
+      }
+      raf = requestAnimationFrame(drawViz);
+    }
+
     toggle.addEventListener('click', async ()=>{
       if(audio.paused){
         try{
+          await ensureAudioGraph();
           await audio.play(); setPaused(false);
+          cancelAnimationFrame(raf); raf = requestAnimationFrame(drawViz);
         }catch{
           alert('เบราว์เซอร์บล็อก auto-play ให้กดเล่นอีกรอบค่ะ');
         }
       }else{
         audio.pause(); setPaused(true);
+        cancelAnimationFrame(raf);
       }
     });
-    audio.addEventListener('ended',()=>setPaused(true));
-    vol.addEventListener('input', e=> audio.volume=+e.target.value);
+    audio.addEventListener('ended',()=>{
+      setPaused(true);
+      cancelAnimationFrame(raf);
+    });
+
+    // ปรับเสียงผ่าน GainNode (ถ้ายังไม่ได้สร้าง graph ให้ปรับที่ audio เป็น fallback)
+    vol.addEventListener('input', async e=>{
+      const value = +e.target.value;
+      if(!ac){ audio.volume = value; }           // เผื่อกรณียังไม่กดเล่น
+      if(!gainNode){ await ensureAudioGraph(); } // สร้างเมื่อมี
+      if(gainNode) gainNode.gain.value = value;
+    });
 
     /* คำอวยพร */
     const wishText=document.getElementById('wishText');
@@ -181,18 +241,86 @@
       'ให้ทุกความฝันค่อย ๆ เป็นจริงทีละข้อ และมีคนดี ๆ อยู่ข้าง ๆ เสมอ Happy Birthday! 🎂',
       'ปีนี้ขอให้พบแต่ความโชคดี โอกาสใหม่ ๆ และความสุขที่ไม่ต้องพยายามก็เจอได้ในทุกวัน 💫'
     ];
-    document.getElementById('randomWish').addEventListener('click', ()=>{
-      const t=wishes[(Math.random()*wishes.length)|0];
-      typeText(wishText,t);
-    });
-    document.getElementById('copyWish').addEventListener('click', async ()=>{
-      try{ await navigator.clipboard.writeText(wishText.innerText.trim()); alert('คัดลอกแล้ว ✨'); }
-      catch{ alert('คัดลอกไม่สำเร็จ'); }
-    });
+
     function typeText(el, text){
       el.innerText=''; let i=0;
       const timer=setInterval(()=>{ el.innerText += text[i++]||''; if(i>=text.length) clearInterval(timer); },18);
     }
+
+    // confetti เล็ก ๆ ตอนสุ่ม/คัดลอก
+    function popConfetti(){
+      const count=18;
+      for(let i=0;i<count;i++){
+        const s=document.createElement('span');
+        s.style.position='fixed';
+        s.style.left=(window.innerWidth/2 + (Math.random()*200-100))+'px';
+        s.style.top=(window.innerHeight/2 + (Math.random()*60-30))+'px';
+        s.style.width=s.style.height=(4+Math.random()*6)+'px';
+        s.style.background=colors[(Math.random()*colors.length)|0];
+        s.style.borderRadius='2px';
+        s.style.transform=`translateY(0) rotate(${Math.random()*360}deg)`;
+        s.style.transition='transform 900ms ease, opacity 900ms ease';
+        s.style.zIndex=9;
+        document.body.appendChild(s);
+        requestAnimationFrame(()=>{
+          s.style.transform=`translateY(${120+Math.random()*120}px) rotate(${Math.random()*360}deg)`;
+          s.style.opacity='0';
+        });
+        setTimeout(()=>s.remove(),1000);
+      }
+    }
+
+    document.getElementById('randomWish').addEventListener('click', ()=>{
+      const t=wishes[(Math.random()*wishes.length)|0];
+      typeText(wishText,t);
+      popConfetti();
+    });
+
+    document.getElementById('copyWish').addEventListener('click', async ()=>{
+      try{ await navigator.clipboard.writeText(wishText.innerText.trim()); popConfetti(); alert('คัดลอกแล้ว ✨'); }
+      catch{ alert('คัดลอกไม่สำเร็จ'); }
+    });
+
+    // แชร์ (Web Share > LINE fallback)
+    document.getElementById('shareWish').addEventListener('click', async ()=>{
+      const text = wishText.innerText.trim();
+      const shareData = { title:'คำอวยพรวันเกิด', text };
+      if(navigator.share){
+        try{ await navigator.share(shareData); }catch{}
+      }else{
+        const url = 'https://line.me/R/msg/text/?' + encodeURIComponent(text);
+        window.open(url,'_blank');
+      }
+    });
+
+    // สุ่มอัตโนมัติ
+    let autoTimer=null, autoOn=false;
+    const autoBtn=document.getElementById('autoToggle');
+    function setAuto(on){
+      autoOn=on;
+      autoBtn.textContent = `สุ่มอัตโนมัติ: ${on?'เปิด':'ปิด'}`;
+      if(autoTimer) clearInterval(autoTimer), autoTimer=null;
+      if(on){
+        autoTimer=setInterval(()=>{
+          const t=wishes[(Math.random()*wishes.length)|0];
+          typeText(wishText,t);
+        }, 6000);
+      }
+    }
+    autoBtn.addEventListener('click',()=> setAuto(!autoOn));
+
+    // ปัดซ้าย/ขวา บนมือถือเพื่อสุ่ม
+    let sx=0, sy=0, st=0;
+    wishText.addEventListener('touchstart',e=>{
+      const t=e.changedTouches[0]; sx=t.clientX; sy=t.clientY; st=Date.now();
+    },{passive:true});
+    wishText.addEventListener('touchend',e=>{
+      const t=e.changedTouches[0], dx=t.clientX-sx, dy=t.clientY-sy, dt=Date.now()-st;
+      if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy) && dt<600){
+        const txt=wishes[(Math.random()*wishes.length)|0];
+        typeText(wishText,txt);
+      }
+    },{passive:true});
   </script>
 </body>
 </html>
